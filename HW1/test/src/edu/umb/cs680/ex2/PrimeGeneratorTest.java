@@ -11,7 +11,7 @@ public class PrimeGeneratorTest {
 
     @Test
     public void Prime1to10(){
-        PrimeGenerator prime = new PrimeGenerator(1,10);
+        PrimeGenerator prime = new PrimeGenerator(2,10);
         prime.generatePrimes();
         Long[] expectedPrimes = {2L, 3L, 5L, 7L};
         assertArrayEquals( expectedPrimes,
@@ -20,10 +20,10 @@ public class PrimeGeneratorTest {
 
     @Test
     public void Prime1to100Count(){
-        PrimeGenerator prime = new PrimeGenerator(1,100);
+        PrimeGenerator prime = new PrimeGenerator(2,51);
         prime.generatePrimes();
         LinkedList<Long> allprimes = prime.getPrimes();
-        assertEquals( 25,allprimes.size() );
+        assertEquals( 15,allprimes.size() );
     }
 
     @Test

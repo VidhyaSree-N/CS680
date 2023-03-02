@@ -1,6 +1,6 @@
 <!--  To run this build script, type: 
 
-      ant -f ex2.xml
+      ant -f hw2.xml
 
       on a shell. 
 -->
@@ -65,10 +65,18 @@
 	</target>
 
 
+<!--	<target name="run" depends="test">-->
+<!--		<java classname="edu.umb.cs680.ex2.SingletonPrimeGenerator"-->
+<!--				classpathref="classpath"-->
+<!--				fork="true">-->
+<!--		</java>-->
+<!--	</target>-->
+
 	<target name="run" depends="test">
-		<java classname="edu.umb.cs680.ex2.PrimeGenerator"
-				classpathref="classpath"
-				fork="true"/>
+		<java classname="edu.umb.cs680.ex2.SingletonPrimeGenerator">
+			<classpath refid="classpath" />
+			<arg line="${arg}" />
+		</java>
 	</target>
 
 	<target name="clean" depends="run">
