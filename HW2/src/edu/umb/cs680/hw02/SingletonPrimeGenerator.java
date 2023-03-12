@@ -1,6 +1,5 @@
-package edu.umb.cs680.ex2;
+package edu.umb.cs680.hw02;
 
-import java.util.InputMismatchException;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Scanner;
@@ -13,12 +12,17 @@ public class SingletonPrimeGenerator {
     private LinkedList<Long> primes = new LinkedList<Long>();
 
     private SingletonPrimeGenerator(long from, long to){
-        if(from >= 1 && to > from){
+        if(from > 1 && to > from){
             this.from = from;
             this.to = to;
         }else{
             throw new RuntimeException("Wrong input values: from=" + from + " to=" + to);
         }
+    }
+
+  //Created reset instance to reset instace to null while testing in Junit
+    public static void resetInstance() {
+        instance = null;
     }
 
     public static SingletonPrimeGenerator getInstance(long from, long to){
@@ -28,7 +32,7 @@ public class SingletonPrimeGenerator {
         return instance;
     }
 
-    public LinkedList<Long> getPrimes(){ return primes; };
+    public LinkedList<Long> getPrimes(){ return primes; }
 
     private boolean isEven(long n){
         if(n%2 == 0){ return true; }
@@ -37,7 +41,7 @@ public class SingletonPrimeGenerator {
 
     private boolean isPrime(long n){
         // 1 or lower numbers are not prime.
-        if(n <= 1){ return false; }
+        if(n < 1){ return false; }
         // Even numbers are not prime, except for 2.
         if( n > 2 && isEven(n) ){ return false; }
         long i;
@@ -55,6 +59,9 @@ public class SingletonPrimeGenerator {
     }
 
     public static void main(String[] args) {
+
+        //Input from and to from User by using Scanner
+
 //        Scanner in = new Scanner(System.in);
 //        System.out.print("Enter the from(starting) value: ");
 //        long from = in.nextLong();
@@ -63,13 +70,15 @@ public class SingletonPrimeGenerator {
 //        in.close();
 //        SingletonPrimeGenerator gen = SingletonPrimeGenerator.getInstance(from, to);
 
-        SingletonPrimeGenerator gen = SingletonPrimeGenerator.getInstance(2, 100);
+        // Declared a from and to values to run in ant
+        SingletonPrimeGenerator gen = SingletonPrimeGenerator.getInstance(2,57);
+
         gen.generatePrimes();
         LinkedList<Long> primes = gen.getPrimes();
         Iterator<Long> it = primes.iterator();
         while(it.hasNext()) {
             System.out.print(it.next() + ", ");
         }
-        System.out.println("\n" + gen.getPrimes().size() + " primes are found.");
+        System.out.println("\n" + gen.getPrimes().size() + " primes are found");
     }
 }

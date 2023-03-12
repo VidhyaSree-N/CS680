@@ -1,6 +1,6 @@
 <!--  To run this build script, type: 
 
-      ant -f ex2.xml
+      ant -f hw1.xml
 
       on a shell. 
 -->
@@ -33,12 +33,12 @@
 	<target name="compile" depends="resolve">
 		<javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no">
 			<classpath refid="classpath"/>
-			<include name="edu/umb/cs680/ex2/*.java"/>
+			<include name="edu/umb/cs680/hw01/*.java"/>
 			<!-- include name="edu/umb/cs680/junit5intro/PrimeGenerator.java"/-->
 		</javac>
 		<javac srcdir="${test.src}" destdir="${test.bin}" includeAntRuntime="no">
 			<classpath refid="classpath"/>
-			<include name="edu/umb/cs680/ex2/*.java"/>
+			<include name="edu/umb/cs680/hw01/*.java"/>
 			<!-- include name="edu/umb/cs680/junit5intro/PrimeGeneratorTest.java"/-->
 		</javac>
 	</target>
@@ -46,7 +46,7 @@
 	<target name="test" depends="compile">
 		<!--junitlauncher printSummary="yes">
 			<classpath refid="classpath" />
-			<test outputdir="test" name="src.ex2.umb.cs680.junit5intro.PrimeGeneratorTest"/>
+			<test outputdir="test" name="src.hw01.umb.cs680.junit5intro.PrimeGeneratorTest"/>
 			<listener type="legacy-plain" sendSysOut="true"/>
 		</junitlauncher-->
 
@@ -66,15 +66,15 @@
 
 
 	<target name="run" depends="test">
-		<java classname="edu.umb.cs680.ex2.PrimeGenerator"
+		<java classname="edu.umb.cs680.hw01.PrimeGenerator"
 				classpathref="classpath"
 				fork="true"/>
 	</target>
 
 	<target name="clean" depends="run">
 		<delete includeemptydirs="true">
-			<fileset dir="${bin}/edu/umb/cs680/ex2" includes="**/*"/>
-			<fileset dir="${test.bin}/edu/umb/cs680/ex2" includes="**/*"/>
+			<fileset dir="${bin}/edu/umb/cs680/hw01" includes="**/*"/>
+			<fileset dir="${test.bin}/edu/umb/cs680/hw01" includes="**/*"/>
 		</delete>
 	</target>
 

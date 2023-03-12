@@ -1,6 +1,6 @@
-package edu.umb.cs680.ex2;
+package edu.umb.cs680.hw01;
 
-import edu.umb.cs680.ex2.PrimeGenerator;
+import edu.umb.cs680.hw01.PrimeGenerator;
 import org.junit.Test;
 
 import java.util.LinkedList;
