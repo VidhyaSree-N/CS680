@@ -1,0 +1,85 @@
+<!--  To run this build script, type: 
+
+      ant -f hw4.xml
+
+      on a shell. 
+-->
+<project name="Main-junit5-ivy" basedir="."  default="clean" xmlns:ivy="antlib:org.apache.ivy.ant">
+	<property name="src" location="src" />
+	<property name="bin" location="bin" />
+	<property name="test.src" location="test/src" />
+	<property name="test.bin" location="test/bin" />
+	<property name="ivy.lib" location="lib"/>
+
+	<path id="classpath">
+		<pathelement location="${bin}" />
+		<pathelement location="${test.bin}" />
+		<fileset dir="${ivy.lib}"/>
+	</path>
+
+	<target name="init">
+		<mkdir dir="${bin}"/>
+		<mkdir dir="${test.bin}"/>
+		<mkdir dir="test/reports"/>
+		<mkdir dir="${ivy.lib}"/>
+		<echo message="CLASSPATH: ${toString:classpath}" />
+	</target>
+
+	<target name="resolve" depends="init"
+			description="--> Download JAR files (listed in ivy.xml) to the 'lib' directory.">
+		<ivy:retrieve/>
+	</target>
+
+	<target name="compile" depends="resolve">
+		<javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no">
+			<classpath refid="classpath"/>
+			<include name="edu/umb/cs680/hw4/*.java"/>
+			<!-- include name="edu/umb/cs680/junit5intro/Main.java"/-->
+		</javac>
+		<javac srcdir="${test.src}" destdir="${test.bin}" includeAntRuntime="no">
+			<classpath refid="classpath"/>
+			<include name="edu/umb/cs680/hw4/*.java"/>
+			<!-- include name="edu/umb/cs680/junit5intro/SecurityContextTest.java"/-->
+		</javac>
+	</target>
+
+	<target name="test" depends="compile">
+		<!--junitlauncher printSummary="yes">
+			<classpath refid="classpath" />
+			<test outputdir="test" name="src.hw4.umb.cs680.junit5intro.SecurityContextTest"/>
+			<listener type="legacy-plain" sendSysOut="true"/>
+		</junitlauncher-->
+
+		<junit printsummary="yes" haltonfailure="yes">
+			<classpath refid="classpath" />
+			<formatter type="plain"/>
+
+			<batchtest fork="yes" todir="test" >
+				<fileset dir="${test.src}">
+					<include name="**/*Test*.java"/>
+					<exclude name="**/AllTests.java"/>
+				</fileset>
+			</batchtest>
+
+		</junit>
+	</target>
+
+
+	<target name="run" depends="test">
+		<java classname="edu.umb.cs680.hw4.Main"
+				classpathref="classpath"
+				fork="true"/>
+	</target>
+
+	<target name="clean" depends="run">
+		<delete includeemptydirs="true">
+			<fileset dir="${bin}/edu/umb/cs680/hw4" includes="**/*"/>
+			<fileset dir="${test.bin}/edu/umb/cs680/hw4" includes="**/*"/>
+		</delete>
+	</target>
+
+    <target name="clean-cache"
+    		description="--> clean the ivy cache (by default ~/.ivy2/cache)">
+        <ivy:cleancache/>
+    </target>
+</project>
