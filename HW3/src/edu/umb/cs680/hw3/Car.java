@@ -1,9 +1,5 @@
 package  edu.umb.cs680.hw3;
 
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.Scanner;
-
 public class Car {
     private String make;
     private String model;

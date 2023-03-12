@@ -6,8 +6,8 @@ import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 
 public class CarTest {
     private String[] carToStringArray(Car car) {
-        String[] carInfo = { car.getMake(), car.getModel(), Integer.toString(car.getYear()) };
-        return carInfo;
+        String[] car3 = { car.getMake(), car.getModel(), Integer.toString(car.getYear()) };
+        return car3;
     }
 
     @Test

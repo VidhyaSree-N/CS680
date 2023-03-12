@@ -33,12 +33,12 @@
 	<target name="compile" depends="resolve">
 		<javac srcdir="${src}" destdir="${bin}" includeAntRuntime="no">
 			<classpath refid="classpath"/>
-			<include name="edu/umb/cs680/ex2/*.java"/>
+			<include name="edu/umb/cs680/hw02/*.java"/>
 			<!-- include name="edu/umb/cs680/junit5intro/PrimeGenerator.java"/-->
 		</javac>
 		<javac srcdir="${test.src}" destdir="${test.bin}" includeAntRuntime="no">
 			<classpath refid="classpath"/>
-			<include name="edu/umb/cs680/ex2/*.java"/>
+			<include name="edu/umb/cs680/hw02/*.java"/>
 			<!-- include name="edu/umb/cs680/junit5intro/PrimeGeneratorTest.java"/-->
 		</javac>
 	</target>
@@ -46,7 +46,7 @@
 	<target name="test" depends="compile">
 		<!--junitlauncher printSummary="yes">
 			<classpath refid="classpath" />
-			<test outputdir="test" name="src.ex2.umb.cs680.junit5intro.PrimeGeneratorTest"/>
+			<test outputdir="test" name="src.hw02.umb.cs680.junit5intro.PrimeGeneratorTest"/>
 			<listener type="legacy-plain" sendSysOut="true"/>
 		</junitlauncher-->
 
@@ -66,14 +66,14 @@
 
 
 <!--	<target name="run" depends="test">-->
-<!--		<java classname="edu.umb.cs680.ex2.SingletonPrimeGenerator"-->
+<!--		<java classname="edu.umb.cs680.hw02.SingletonPrimeGenerator"-->
 <!--				classpathref="classpath"-->
 <!--				fork="true">-->
 <!--		</java>-->
 <!--	</target>-->
 
 	<target name="run" depends="test">
-		<java classname="edu.umb.cs680.ex2.SingletonPrimeGenerator">
+		<java classname="edu.umb.cs680.hw02.SingletonPrimeGenerator">
 			<classpath refid="classpath" />
 			<arg line="${arg}" />
 		</java>
@@ -81,8 +81,8 @@
 
 	<target name="clean" depends="run">
 		<delete includeemptydirs="true">
-			<fileset dir="${bin}/edu/umb/cs680/ex2" includes="**/*"/>
-			<fileset dir="${test.bin}/edu/umb/cs680/ex2" includes="**/*"/>
+			<fileset dir="${bin}/edu/umb/cs680/hw02" includes="**/*"/>
+			<fileset dir="${test.bin}/edu/umb/cs680/hw02" includes="**/*"/>
 		</delete>
 	</target>
 
