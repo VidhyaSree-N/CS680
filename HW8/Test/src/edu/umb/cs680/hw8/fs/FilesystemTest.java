@@ -1,6 +1,7 @@
 package edu.umb.cs680.hw8.fs;
 
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -9,21 +10,26 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FilesystemTest {
 
-    private LocalDateTime time = LocalDateTime.now();
+    private static LocalDateTime time;
+    private static SingletonFilesystem singletonFilesystem;
+
+    @BeforeEach
+    public void setup(){
+        time = LocalDateTime.now();
+        singletonFilesystem = SingletonFilesystem.getFileSystem();
+
+    }
 
     @Test
     public void singletonTest() {
-        SingletonFilesystem fs1 = SingletonFilesystem.getFileSystem();
-        SingletonFilesystem fs2 = SingletonFilesystem.getFileSystem();
-        assertSame(fs1, fs2);
+        SingletonFilesystem singletonFilesystem2 = SingletonFilesystem.getFileSystem();
+        assertSame(singletonFilesystem, singletonFilesystem2);
     }
 
     @Test
     public void appendRootTest() {
         Directory root = new Directory(null, "Root", 0, time);
-        SingletonFilesystem singletonFilesystem = SingletonFilesystem.getFileSystem();
         singletonFilesystem.appendRootDirectory(root);
-
         Directory[] expected = { root };
         Directory[] actual = singletonFilesystem.getRootDirs().toArray(new Directory[0]);
 
@@ -33,11 +39,8 @@ public class FilesystemTest {
 
     @Test
     public void rootDirectoryTest(){
-        SingletonFilesystem singletonFilesystem = SingletonFilesystem.getFileSystem();
         Directory[] actual = singletonFilesystem.getRootDirs().toArray(new Directory[0]);
-        int size = actual.length;
-
-        assertEquals(1,size);
+        assertEquals(1,actual.length);
 
     }
 
