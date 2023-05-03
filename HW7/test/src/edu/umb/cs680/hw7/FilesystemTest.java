@@ -7,7 +7,6 @@ import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class FilesystemTest {
 
     private static LocalDateTime time;
