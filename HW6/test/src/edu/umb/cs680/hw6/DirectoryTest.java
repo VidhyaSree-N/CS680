@@ -19,8 +19,8 @@ public class DirectoryTest {
     private static File file_d;
     private static File file_x;
 
-    @BeforeEach
-    public void createFS() {
+    @BeforeAll
+    public static void createFS() {
         time = LocalDateTime.now();
         root = new Directory(null, "root", 0, time);
         src = new Directory(root, "src", 0, time);
@@ -130,5 +130,10 @@ public class DirectoryTest {
         String[] expected = new String[]{"test","src","0",String.valueOf(time)};
         Directory actual = srctest;
         assertArrayEquals(expected, dirToStringArray(actual));
+    }
+
+    @AfterAll
+    public static void print(){
+        System.out.println("Test Cases Completed");
     }
 }

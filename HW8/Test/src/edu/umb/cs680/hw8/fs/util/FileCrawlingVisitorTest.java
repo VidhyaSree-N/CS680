@@ -3,7 +3,8 @@ package edu.umb.cs680.hw8.fs.util;
 import edu.umb.cs680.hw8.fs.Directory;
 import edu.umb.cs680.hw8.fs.File;
 import edu.umb.cs680.hw8.fs.Link;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -27,8 +28,8 @@ public class FileCrawlingVisitorTest {
     //Creating link
     private static Link link_y;
 
-    @BeforeEach
-    public void createFS() {
+    @BeforeAll
+    public static void createFS() {
         time = LocalDateTime.now();
         root = new Directory(null, "root", 0, time);
         src = new Directory(root, "src", 0, time);
@@ -124,4 +125,10 @@ public class FileCrawlingVisitorTest {
 
         assertArrayEquals(exp, act);
     }
+
+    @AfterAll
+    public static void print(){
+        System.out.println("Test Cases Completed");
+    }
+
 }

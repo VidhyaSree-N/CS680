@@ -1,10 +1,7 @@
 package edu.umb.cs680.hw7;
 
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 
@@ -16,8 +13,8 @@ public class FilesystemTest {
     private static LocalDateTime time;
     private static SingletonFilesystem singletonFilesystem;
 
-    @BeforeEach
-    public void setup(){
+    @BeforeAll
+    public static void setup(){
         time = LocalDateTime.now();
         singletonFilesystem = SingletonFilesystem.getFileSystem();
 
@@ -48,5 +45,9 @@ public class FilesystemTest {
 
     }
 
+    @AfterAll
+    public static void print(){
+        System.out.println("Test Cases Completed");
+    }
 
 }

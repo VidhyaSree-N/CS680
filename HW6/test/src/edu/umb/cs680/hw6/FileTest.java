@@ -1,6 +1,7 @@
 package edu.umb.cs680.hw6;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDateTime;
@@ -21,8 +22,8 @@ public class FileTest {
     private static File file_d;
     private static File file_x;
 
-    @BeforeEach
-    public void createFS() {
+    @BeforeAll
+    public static void createFS() {
         time = LocalDateTime.now();
         root = new Directory(null, "root", 0, time);
         src = new Directory(root, "src", 0, time);
@@ -98,5 +99,10 @@ public class FileTest {
         String[] expected = new String[]{"root","x","0",String.valueOf(time)};
         File actual = file_x;
         assertArrayEquals(expected, fileToStringArray(actual));
+    }
+
+    @AfterAll
+    public static void print(){
+        System.out.println("Test Cases Completed");
     }
 }

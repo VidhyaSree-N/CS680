@@ -1,14 +1,12 @@
 package edu.umb.cs680.hw7;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DirectoryTest {
-
     private static LocalDateTime time;
     private static Directory root;
     private static Directory src;
@@ -21,8 +19,8 @@ public class DirectoryTest {
     private static File file_d;
     private static File file_x;
 
-    @BeforeEach
-    public void createFS() {
+    @BeforeAll
+    public static void createFS() {
         time = LocalDateTime.now();
         root = new Directory(null, "root", 0, time);
         src = new Directory(root, "src", 0, time);
@@ -47,7 +45,6 @@ public class DirectoryTest {
         srctest.appendChild(file_d);
         root.appendChild(file_x);
     }
-
 
     private String[] dirToStringArray(Directory d){
         String parent = null;
@@ -133,5 +130,10 @@ public class DirectoryTest {
         String[] expected = new String[]{"test","src","0",String.valueOf(time)};
         Directory actual = srctest;
         assertArrayEquals(expected, dirToStringArray(actual));
+    }
+
+    @AfterAll
+    public static void print(){
+        System.out.println("Test Cases Completed");
     }
 }
