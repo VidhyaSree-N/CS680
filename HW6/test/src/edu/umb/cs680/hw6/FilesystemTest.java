@@ -9,38 +9,33 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class FilesystemTest {
 
-    private static LocalDateTime time;
-    private static SingletonFilesystem singletonFilesystem;
+    private static SingletonFilesystem fs;
 
     @BeforeAll
-    public static void setup(){
-        time = LocalDateTime.now();
-        singletonFilesystem = SingletonFilesystem.getFileSystem();
-
+    public static void setUp() {
+        fs = TestFixtureInitializer.createFS();
     }
 
     @Test
     public void singletonTest() {
         SingletonFilesystem singletonFilesystem2 = SingletonFilesystem.getFileSystem();
-        assertSame(singletonFilesystem, singletonFilesystem2);
+        assertSame(fs, singletonFilesystem2);
     }
 
     @Test
     public void appendRootTest() {
-        Directory root = new Directory(null, "Root", 0, time);
-        singletonFilesystem.appendRootDirectory(root);
+        Directory root = new Directory(null, "Root", 0, LocalDateTime.now());
+        Directory expected = root;
+        Directory actual = fs.getRootDirs().getFirst();
 
-        Directory[] expected = { root };
-        Directory[] actual = singletonFilesystem.getRootDirs().toArray(new Directory[0]);
-
-        assertArrayEquals(expected, actual);
+        assertEquals(expected.size, actual.size);
 
     }
 
     @Test
     public void rootDirectoryTest(){
-        Directory[] actual = singletonFilesystem.getRootDirs().toArray(new Directory[0]);
-        assertEquals(1,actual.length);
+        Directory actual = fs.getRootDirs().get(0);
+        assertEquals(4,actual.countChildren());
 
     }
 

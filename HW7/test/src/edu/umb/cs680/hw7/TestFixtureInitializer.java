@@ -1,4 +1,4 @@
-package edu.umb.cs680.hw6;
+package edu.umb.cs680.hw7;
 
 import java.time.LocalDateTime;
 
@@ -17,6 +17,7 @@ public class TestFixtureInitializer {
             File file_c = new File(lib, "c", 32, time);
             File file_d = new File(srctest, "d", 1024, time);
             File file_x = new File(root, "x", 0, time);
+            Link link_y = new Link(root,"y",0,time,srctest);
 
             fs.appendRootDirectory(root);
 
@@ -29,6 +30,7 @@ public class TestFixtureInitializer {
             lib.appendChild(file_c);
             srctest.appendChild(file_d);
             root.appendChild(file_x);
+            root.appendChild(link_y);
 
             return fs;
         }

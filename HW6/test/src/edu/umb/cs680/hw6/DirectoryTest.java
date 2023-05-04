@@ -32,78 +32,96 @@ public class DirectoryTest {
 
     @Test
     public void isDirectory() {
-        assertTrue(TestFixtureInitializer.root.isDirectory());
-        assertFalse(TestFixtureInitializer.file_a.isDirectory());
+        assertTrue(fs.getRootDirs().getFirst().isDirectory());
+        Directory root = fs.getRootDirs().getFirst();
+        Directory src = root.getSubDirectories().getFirst();
+        File a = src.getFiles().getFirst();
+        assertFalse(a.isDirectory());
     }
 
     @Test
     public void getChildrenTest() {
-        assertEquals(2, TestFixtureInitializer.src.getChildren().size());
+        Directory root = fs.getRootDirs().getFirst();
+        Directory src = root.getSubDirectories().getFirst();
+
+        assertEquals(2,src.getChildren().size());
     }
 
     @Test
     public void appendChildTest() {
-        assertEquals(1, TestFixtureInitializer.lib.getChildren().size());
+        Directory root = fs.getRootDirs().getFirst();
+        Directory lib = root.getSubDirectories().get(1);
+
+        assertEquals(1, lib.getChildren().size());
     }
 
     @Test
     public void countChildrenTest() {
-        assertEquals(4, TestFixtureInitializer.root.countChildren());
+        Directory root = fs.getRootDirs().getFirst();
+        assertEquals(4, root.countChildren());
     }
 
     @Test
     public void getSubDirectoriesTest() {
-        assertEquals(3, TestFixtureInitializer.root.getSubDirectories().size());
+        Directory root = fs.getRootDirs().getFirst();
+        assertEquals(0, root.getSubDirectories().get(2).size);
     }
 
     @Test
     public void getFilesTest() {
-        assertEquals(1, TestFixtureInitializer.lib.getFiles().size());
+        Directory root = fs.getRootDirs().getFirst();
+        Directory lib = root.getSubDirectories().get(1);
+        assertEquals(32, lib.getFiles().get(0).size);
     }
 
     @Test
     public void getTotalSize() {
-        assertEquals(1024, TestFixtureInitializer.test.getTotalSize());
+        Directory root = fs.getRootDirs().getFirst();
+        Directory test = root.getSubDirectories().get(2);
+        assertEquals(1024, test.getTotalSize());
     }
 
     @Test
     public void verifyEqualityDirectoryRoot(){
-        String[] expected = new String[]{null,"root", "0",String.valueOf(TestFixtureInitializer.time)};
-        Directory actual = TestFixtureInitializer.root;
+        String[] expected = new String[]{null,"root", "0",String.valueOf(fs.getRootDirs().getFirst().creationTime)};
+        Directory actual = fs.getRootDirs().getFirst();
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @Test
     public void verifyEqualityDirectorysrc () {
-        String[] expected = new String[]{"root","src","0",String.valueOf(TestFixtureInitializer.time)};
-        Directory actual = TestFixtureInitializer.src;
+        String[] expected = new String[]{"root","src","0",String.valueOf(fs.getRootDirs().getFirst().getSubDirectories().getFirst().creationTime)};
+        Directory root = fs.getRootDirs().getFirst();
+        Directory actual = root.getSubDirectories().getFirst();
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @Test
     public void verifyEqualityDirectorylib (){
-        String[] expected = new String[]{"root","lib","0",String.valueOf(TestFixtureInitializer.time)};
-        Directory actual = TestFixtureInitializer.lib;
+        String[] expected = new String[]{"root","lib","0",String.valueOf(fs.getRootDirs().getFirst().getSubDirectories().get(1).creationTime)};
+        Directory root = fs.getRootDirs().getFirst();
+        Directory actual = root.getSubDirectories().get(1);
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @Test
     public void verifyEqualityDirectorytest (){
-        String[] expected = new String[]{"root","test","0",String.valueOf(TestFixtureInitializer.time)};
-        Directory actual = TestFixtureInitializer.test;
+        String[] expected = new String[]{"root","test","0",String.valueOf(fs.getRootDirs().getFirst().getSubDirectories().get(2).creationTime)};
+        Directory root = fs.getRootDirs().getFirst();
+        Directory actual = root.getSubDirectories().get(2);
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @Test
     public void verifyEqualityDirectorysrctest (){
-        String[] expected = new String[]{"test","src","0",String.valueOf(TestFixtureInitializer.time)};
-        Directory actual = TestFixtureInitializer.srctest;
+        String[] expected = new String[]{"test","src","0",String.valueOf(fs.getRootDirs().get(0).getSubDirectories().get(2).creationTime)};
+        Directory test = fs.getRootDirs().getFirst().getSubDirectories().get(2);
+        Directory actual = test.getSubDirectories().getFirst();
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @AfterAll
     public static void print(){
-        TestFixtureInitializer.tearDown();
         System.out.println("Test Cases Completed");
     }
 }

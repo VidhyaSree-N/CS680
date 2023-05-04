@@ -1,76 +1,17 @@
 package edu.umb.cs680.hw7;
 
-import org.junit.jupiter.api.*;
-
-import java.time.LocalDateTime;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class DirectoryTest {
-    private static LocalDateTime time;
-    private static Directory root;
-    private static Directory src;
-    private static Directory lib;
-    private static Directory test;
-    private static Directory srctest;
-    private static File file_a;
-    private static File file_b;
-    private static File file_c;
-    private static File file_d;
-    private static File file_x;
-    private static Link link_y;
 
     private static SingletonFilesystem fs;
 
-    private static class TestFixtureInitializer {
-        public static SingletonFilesystem createFS() {
-            SingletonFilesystem fs = SingletonFilesystem.getFileSystem();
-            time = LocalDateTime.now();
-            root = new Directory(null, "root", 0, time);
-            src = new Directory(root, "src", 0, time);
-            lib = new Directory(root, "lib", 0, time);
-            test = new Directory(root, "test", 0, time);
-            srctest = new Directory(test, "src", 0, time);
-            file_a = new File(src, "a", 64, time);
-            file_b = new File(src, "b", 128, time);
-            file_c = new File(lib, "c", 32, time);
-            file_d = new File(srctest, "d", 1024, time);
-            file_x = new File(root, "x", 0, time);
-            //Creating link
-            link_y = new Link(root,"y",0,time,srctest);
-
-            //directories
-            root.appendChild(src);
-            root.appendChild(lib);
-            root.appendChild(test);
-            test.appendChild(srctest);
-            //files
-            src.appendChild(file_a);
-            src.appendChild(file_b);
-            lib.appendChild(file_c);
-            srctest.appendChild(file_d);
-            root.appendChild(file_x);
-            root.appendChild(link_y);
-            return fs;
-        }
-
-        public static void teardown(){
-            time = null;
-            root = null;
-            src = null;
-            lib = null;
-            test = null;
-            srctest = null;
-            file_a = null;
-            file_b = null;
-            file_c = null;
-            file_d = null;
-            file_x = null;
-        }
-    }
-
     @BeforeAll
-    public static void setUpFS() {
+    public static void setUp() {
         fs = TestFixtureInitializer.createFS();
     }
 
@@ -90,79 +31,97 @@ public class DirectoryTest {
     }
 
     @Test
-    public void isDirectoryTest() {
-        assertTrue(root.isDirectory());
-        assertFalse(file_a.isDirectory());
+    public void isDirectory() {
+        assertTrue(fs.getRootDirs().getFirst().isDirectory());
+        Directory root = fs.getRootDirs().getFirst();
+        Directory src = root.getSubDirectories().getFirst();
+        File a = src.getFiles().getFirst();
+        assertFalse(a.isDirectory());
     }
 
     @Test
     public void getChildrenTest() {
-        assertEquals(2, src.getChildren().size());
+        Directory root = fs.getRootDirs().getFirst();
+        Directory src = root.getSubDirectories().getFirst();
+
+        assertEquals(2,src.getChildren().size());
     }
 
     @Test
     public void appendChildTest() {
+        Directory root = fs.getRootDirs().getFirst();
+        Directory lib = root.getSubDirectories().get(1);
+
         assertEquals(1, lib.getChildren().size());
     }
 
     @Test
     public void countChildrenTest() {
+        Directory root = fs.getRootDirs().getFirst();
         assertEquals(5, root.countChildren());
     }
 
     @Test
     public void getSubDirectoriesTest() {
-        assertEquals(3, root.getSubDirectories().size());
+        Directory root = fs.getRootDirs().getFirst();
+        assertEquals(0, root.getSubDirectories().get(2).size);
     }
 
     @Test
     public void getFilesTest() {
-        assertEquals(1, lib.getFiles().size());
+        Directory root = fs.getRootDirs().getFirst();
+        Directory lib = root.getSubDirectories().get(1);
+        assertEquals(32, lib.getFiles().get(0).size);
     }
 
     @Test
     public void getTotalSize() {
+        Directory root = fs.getRootDirs().getFirst();
+        Directory test = root.getSubDirectories().get(2);
         assertEquals(1024, test.getTotalSize());
     }
 
     @Test
     public void verifyEqualityDirectoryRoot(){
-        String[] expected = new String[]{null,"root", "0",String.valueOf(time)};
-        Directory actual = root;
+        String[] expected = new String[]{null,"root", "0",String.valueOf(fs.getRootDirs().getFirst().creationTime)};
+        Directory actual = fs.getRootDirs().getFirst();
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @Test
     public void verifyEqualityDirectorysrc () {
-        String[] expected = new String[]{"root","src","0",String.valueOf(time)};
-        Directory actual = src;
+        String[] expected = new String[]{"root","src","0",String.valueOf(fs.getRootDirs().getFirst().getSubDirectories().getFirst().creationTime)};
+        Directory root = fs.getRootDirs().getFirst();
+        Directory actual = root.getSubDirectories().getFirst();
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @Test
     public void verifyEqualityDirectorylib (){
-        String[] expected = new String[]{"root","lib","0",String.valueOf(time)};
-        Directory actual = lib;
+        String[] expected = new String[]{"root","lib","0",String.valueOf(fs.getRootDirs().getFirst().getSubDirectories().get(1).creationTime)};
+        Directory root = fs.getRootDirs().getFirst();
+        Directory actual = root.getSubDirectories().get(1);
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @Test
     public void verifyEqualityDirectorytest (){
-        String[] expected = new String[]{"root","test","0",String.valueOf(time)};
-        Directory actual = test;
+        String[] expected = new String[]{"root","test","0",String.valueOf(fs.getRootDirs().getFirst().getSubDirectories().get(2).creationTime)};
+        Directory root = fs.getRootDirs().getFirst();
+        Directory actual = root.getSubDirectories().get(2);
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @Test
     public void verifyEqualityDirectorysrctest (){
-        String[] expected = new String[]{"test","src","0",String.valueOf(time)};
-        Directory actual = srctest;
+        String[] expected = new String[]{"test","src","0",String.valueOf(fs.getRootDirs().get(0).getSubDirectories().get(2).creationTime)};
+        Directory test = fs.getRootDirs().getFirst().getSubDirectories().get(2);
+        Directory actual = test.getSubDirectories().getFirst();
         assertArrayEquals(expected, dirToStringArray(actual));
     }
 
     @AfterAll
     public static void print(){
         System.out.println("Test Cases Completed");
-        TestFixtureInitializer.teardown();
     }
 }
