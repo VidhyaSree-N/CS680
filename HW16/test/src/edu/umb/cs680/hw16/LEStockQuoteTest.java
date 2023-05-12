@@ -1,0 +1,130 @@
+package edu.umb.cs680.hw16;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
+public class LEStockQuoteTest {
+    private StockQuoteObservable observable;
+    private Observer<StockEvent> lineChartObserver;
+    private Observer<StockEvent> tableObserver;
+    private Observer<StockEvent> threeDObserver;
+
+    @BeforeEach
+    public void setUp() {
+        observable = new StockQuoteObservable();
+        //Setting up lamda experssions for each type of observers
+        lineChartObserver = (sender, event) -> {
+            String ticker = event.getTicker();
+            double quote = event.getQuote();
+            System.out.println("LineChartObserver : ticker = " + ticker + " and quote = " + quote);
+        };
+
+        tableObserver = (sender, event) -> {
+            String ticker = event.getTicker();
+            double quote = event.getQuote();
+            System.out.println("tableObserver : ticker = " + ticker + " and quote = " + quote);
+        };
+
+        threeDObserver = (sender, event) -> {
+            String ticker = event.getTicker();
+            double quote = event.getQuote();
+            System.out.println("threeDObserver : ticker = " + ticker + " and quote = " + quote);
+        };
+    }
+
+    @Test
+    public void testNotifyObserver() {
+
+        observable.addObserver(lineChartObserver);
+
+        observable.changeQuote("LamdaEx", 100.00);
+        assertEquals(1,observable.countObservers());
+        assertEquals(lineChartObserver,observable.getObservers().get(0));
+        observable.removeObserver(lineChartObserver);
+
+    }
+
+    @Test
+    void testMultipleObserversUpdate() {
+        observable.addObserver(lineChartObserver);
+        observable.addObserver(tableObserver);
+        observable.addObserver(threeDObserver);
+
+        String ticker = "LamdaEx";
+        double quote = 100.0;
+        observable.changeQuote(ticker, quote);
+
+        assertEquals(3,observable.countObservers());
+        assertEquals(lineChartObserver,observable.getObservers().get(0));
+        assertEquals(tableObserver,observable.getObservers().get(1));
+        assertEquals(threeDObserver,observable.getObservers().get(2));
+        observable.removeObserver(tableObserver);
+        observable.removeObserver(threeDObserver);
+        observable.removeObserver(lineChartObserver);
+
+    }
+
+
+    @Test
+    public void testClearObservers() {
+        observable.addObserver(tableObserver);
+        observable.addObserver(lineChartObserver);
+
+        observable.clearObservers();
+
+        assertEquals(0,observable.countObservers());
+        observable.removeObserver(lineChartObserver);
+        observable.removeObserver(tableObserver);
+
+    }
+
+    @Test
+    void testRemoveObserver() {
+        observable.addObserver(lineChartObserver);
+        observable.addObserver(tableObserver);
+        observable.changeQuote("LamdaEx", 100.00);
+        assertEquals(lineChartObserver,observable.getObservers().get(0));
+        assertEquals(tableObserver,observable.getObservers().get(1));
+        observable.removeObserver(lineChartObserver);
+        assertEquals(1,observable.countObservers());
+        assertEquals(tableObserver,observable.getObservers().get(0));
+        observable.removeObserver(tableObserver);
+
+    }
+
+    @Test
+    void randomQuoteChangeNotification() throws InterruptedException {
+        observable.addObserver(tableObserver);
+        observable.addObserver(threeDObserver);
+        observable.addObserver(lineChartObserver);
+
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                String ticker = "LamdaEx";
+                // Generates random quote
+                double quote = Math.random() * 1000;
+                observable.changeQuote(ticker, quote);
+            }
+        }, 0, 1000); // Change quote every second
+
+        Thread.sleep(6000); // run for 6 seconds
+        timer.cancel(); // Stopping timer
+
+        assertEquals(3,observable.countObservers());
+
+        observable.removeObserver(lineChartObserver);
+        observable.removeObserver(tableObserver);
+        observable.removeObserver(threeDObserver);
+
+        assertEquals(0,observable.countObservers());
+    }
+
+
+}
