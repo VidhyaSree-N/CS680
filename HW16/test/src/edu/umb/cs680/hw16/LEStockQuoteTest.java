@@ -3,6 +3,8 @@ package edu.umb.cs680.hw16;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -42,9 +44,13 @@ public class LEStockQuoteTest {
 
         observable.addObserver(lineChartObserver);
 
+        Map<String,Double> expected = new HashMap<>();
+        expected.put("LamdaEx", 100.00);
+
         observable.changeQuote("LamdaEx", 100.00);
         assertEquals(1,observable.countObservers());
         assertEquals(lineChartObserver,observable.getObservers().get(0));
+        assertEquals(expected,observable.getTickerQuoteMap());
         observable.removeObserver(lineChartObserver);
 
     }
@@ -54,15 +60,18 @@ public class LEStockQuoteTest {
         observable.addObserver(lineChartObserver);
         observable.addObserver(tableObserver);
         observable.addObserver(threeDObserver);
+        Map<String,Double> expected = new HashMap<>();
+        expected.put("AAPLgdfj", 100.00);
+        expected.put("LamdaEx", 18760.00);
 
-        String ticker = "LamdaEx";
-        double quote = 100.0;
-        observable.changeQuote(ticker, quote);
+        observable.changeQuote("AAPLgdfj", 100.00);
+        observable.changeQuote("LamdaEx", 18760.00);
 
         assertEquals(3,observable.countObservers());
         assertEquals(lineChartObserver,observable.getObservers().get(0));
         assertEquals(tableObserver,observable.getObservers().get(1));
         assertEquals(threeDObserver,observable.getObservers().get(2));
+        assertEquals(expected,observable.getTickerQuoteMap());
         observable.removeObserver(tableObserver);
         observable.removeObserver(threeDObserver);
         observable.removeObserver(lineChartObserver);
@@ -78,8 +87,6 @@ public class LEStockQuoteTest {
         observable.clearObservers();
 
         assertEquals(0,observable.countObservers());
-        observable.removeObserver(lineChartObserver);
-        observable.removeObserver(tableObserver);
 
     }
 

@@ -3,10 +3,13 @@ package edu.umb.cs680.hw16;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 public class StockQuoteTest {
 
@@ -21,10 +24,14 @@ public class StockQuoteTest {
     public void testNotifyObserver() {
         LineChartObserver lineChartObserver = new LineChartObserver();
         observable.addObserver(lineChartObserver);
+        Map<String,Double> expected = new HashMap<>();
+        expected.put("AAPLgdfj", 100.00);
 
         observable.changeQuote("AAPLgdfj", 100.00);
         assertEquals(1,observable.countObservers());
         assertEquals(lineChartObserver,observable.getObservers().get(0));
+        assertNotNull(observable.getTickerQuoteMap().containsKey("AAPLlgdfj"));
+        assertEquals(expected,observable.getTickerQuoteMap());
         observable.removeObserver(lineChartObserver);
 
     }
@@ -38,14 +45,19 @@ public class StockQuoteTest {
         observable.addObserver(tableObserver);
         observable.addObserver(threeDObserver);
 
-        String ticker = "AAPtafL";
-        double quote = 100.0;
-        observable.changeQuote(ticker, quote);
+        Map<String,Double> expected = new HashMap<>();
+        expected.put("AsdftgY", 100.00);
+        expected.put("qwerty",1567.89);
+        observable.changeQuote("AsdftgY", 100.00);
+        observable.changeQuote("qwerty", 1567.89);
 
         assertEquals(3,observable.countObservers());
         assertEquals(lineChartObserver,observable.getObservers().get(0));
         assertEquals(tableObserver,observable.getObservers().get(1));
         assertEquals(threeDObserver,observable.getObservers().get(2));
+        assertNotNull(observable.getTickerQuoteMap().containsKey("AAPLlgdfj"));
+        assertEquals(expected,observable.getTickerQuoteMap());
+        assertEquals(2,observable.getTickerQuoteMap().size());
         observable.removeObserver(tableObserver);
         observable.removeObserver(threeDObserver);
         observable.removeObserver(lineChartObserver);
@@ -64,8 +76,6 @@ public class StockQuoteTest {
         observable.clearObservers();
 
         assertEquals(0,observable.countObservers());
-        observable.removeObserver(lineChartObserver);
-        observable.removeObserver(tableObserver);
 
     }
 
@@ -76,6 +86,7 @@ public class StockQuoteTest {
         observable.addObserver(lineChartObserver);
         observable.addObserver(tableObserver);
         observable.changeQuote("AAPLgdfj", 100.00);
+
         assertEquals(lineChartObserver,observable.getObservers().get(0));
         assertEquals(tableObserver,observable.getObservers().get(1));
         observable.removeObserver(lineChartObserver);
