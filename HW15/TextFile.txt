@@ -1,0 +1,13 @@
+To implement strategy design pattern ,
+
+I have taken an example of text Editor where the user can edit the text like
+- cropping : Crop the Given Text into half
+- Uppercase : Convert the text to UpperCase
+- LowerCase : Convert the text to LowerCase
+- AddText : Add additional text to given text
+- Styling : Change the style of text
+
+I have implemented this with the help of strategy pattern by creating interface Editor.
+All the editing types mentioned above implement Editor and TextEditor is the context that calls Editor.
+
+For example implementation I have kept the functionalities minimum.
